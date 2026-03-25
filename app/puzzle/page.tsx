@@ -9,6 +9,8 @@ import { getRandomPosition } from "@/lib/chess/positions";
 import { EndgamePattern } from "@/lib/chess/patterns";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function PuzzlePage() {
   const trainer = useEndgameTrainer("puzzle");
@@ -68,7 +70,7 @@ export default function PuzzlePage() {
 
   if (!trainer.fen) {
     return (
-      <div className="flex-1 flex flex-col items-center px-6 py-12 max-w-4xl mx-auto">
+      <div className="flex-1 flex flex-col items-center px-4 sm:px-6 py-10 sm:py-12 max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="font-heading text-3xl font-bold tracking-tight mb-2">
             Puzzle Mode
@@ -84,11 +86,11 @@ export default function PuzzlePage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row gap-6 p-6 max-w-6xl mx-auto w-full">
+    <div className="flex-1 flex flex-col lg:flex-row gap-5 sm:gap-6 p-4 sm:p-6 max-w-6xl mx-auto w-full">
       {/* Board Column */}
-      <div className="flex flex-col items-center gap-4 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <h2 className="font-heading font-bold text-base">
+      <div className="flex flex-col items-center gap-4 shrink-0 w-full lg:w-auto">
+        <div className="flex items-center gap-2.5 flex-wrap justify-center">
+          <h2 className="font-heading font-bold text-base text-center">
             {currentPattern?.name}
           </h2>
           <Badge variant="outline" className="text-xs font-mono">
@@ -123,7 +125,52 @@ export default function PuzzlePage() {
           </p>
         )}
 
-        <div className="flex gap-2">
+        <Card className="w-full max-w-[480px]" size="sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">Puzzle Focus</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-xs">
+            <div>
+              <p className="font-medium text-foreground">
+                {trainer.position?.targetResult === "draw"
+                  ? "Objective: hold the draw"
+                  : "Objective: convert the position"}
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                {trainer.position?.lessonGoal}
+              </p>
+            </div>
+            <Separator />
+            <div>
+              <p className="font-medium text-foreground">What to look for</p>
+              <p className="mt-1 text-muted-foreground">
+                {trainer.position?.idealPlan}
+              </p>
+            </div>
+            {trainer.latestMove?.conceptFeedback && (
+              <>
+                <Separator />
+                <div>
+                  <p className="font-medium text-foreground">
+                    Latest takeaway: {trainer.latestMove.conceptFeedback.label}
+                  </p>
+                  <p className="mt-1 text-muted-foreground">
+                    {trainer.latestMove.conceptFeedback.summary}
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {trainer.latestMove.conceptFeedback.tags.map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-[10px]">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        <div className="flex gap-2 flex-wrap justify-center">
           <Button variant="outline" size="sm" onClick={handleNextPuzzle}>
             {trainer.isGameOver ? "Next Puzzle" : "Skip"}
           </Button>
@@ -142,7 +189,7 @@ export default function PuzzlePage() {
       </div>
 
       {/* Coach Column */}
-      <div className="flex-1 min-h-[400px] lg:min-h-0 lg:h-[580px]">
+      <div className="flex-1 min-h-[320px] h-[420px] sm:h-[500px] lg:min-h-0 lg:h-[580px]">
         <CoachPanel
           key={coachSessionKey}
           ref={coachRef}

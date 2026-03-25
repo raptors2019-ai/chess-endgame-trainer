@@ -7,7 +7,10 @@ import {
   getOptimalMove,
   evaluateUserMove,
 } from "@/lib/chess/tablebase";
-import { buildConceptFeedback } from "@/lib/chess/concept-feedback";
+import {
+  buildConceptFeedback,
+  ConceptFeedback,
+} from "@/lib/chess/concept-feedback";
 import { Position } from "@/lib/chess/positions";
 import { buildMoveMessage, buildCoachSystemPrompt } from "@/lib/coach-prompt";
 import { getPatternById } from "@/lib/chess/patterns";
@@ -18,6 +21,7 @@ interface MoveRecord {
   san: string;
   uci: string;
   quality: string;
+  conceptFeedback: ConceptFeedback | null;
 }
 
 function getLessonContext(position: Position | null) {
@@ -131,7 +135,10 @@ export function useEndgameTrainer(mode: "lesson" | "puzzle") {
         optimalMove,
       });
 
-      setMoveHistory((prev) => [...prev, { fen, san, uci, quality }]);
+      setMoveHistory((prev) => [
+        ...prev,
+        { fen, san, uci, quality, conceptFeedback },
+      ]);
 
       const gameAfterUser = new Chess(newFen);
       if (gameAfterUser.isCheckmate()) {
@@ -327,6 +334,7 @@ export function useEndgameTrainer(mode: "lesson" | "puzzle") {
     patternId,
     position,
     moveHistory,
+    latestMove: moveHistory[moveHistory.length - 1] ?? null,
     isGameOver,
     gameOverReason,
     isThinking,

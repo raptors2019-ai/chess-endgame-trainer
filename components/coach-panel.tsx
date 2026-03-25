@@ -54,13 +54,13 @@ export const CoachPanel = forwardRef<CoachPanelHandle, CoachPanelProps>(
     const isStreaming = status === "streaming" || status === "submitted";
 
     return (
-      <div className="flex flex-col h-full bg-card rounded-xl border border-border shadow-sm">
+      <div className="flex flex-col h-full min-h-0 bg-card rounded-xl border border-border shadow-sm">
         <div className="px-5 py-3.5 border-b border-border flex items-center gap-2">
           <span className="text-base">🎓</span>
           <h3 className="font-heading font-bold text-sm text-foreground">Coach</h3>
         </div>
 
-        <ScrollArea className="flex-1 px-4 py-3" ref={scrollRef}>
+        <ScrollArea className="flex-1 min-h-0 px-4 py-3" ref={scrollRef}>
           <div className="space-y-4">
             {messages.length === 0 && (
               <p className="text-sm text-muted-foreground italic">

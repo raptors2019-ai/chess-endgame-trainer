@@ -100,7 +100,9 @@ export function ChessBoard({
   );
 
   return (
-    <div className="rounded-lg overflow-hidden shadow-lg" style={{ width: 480, height: 480 }}>
+    <div
+      className="w-full max-w-[480px] aspect-square rounded-lg overflow-hidden shadow-lg"
+    >
       <Chessboard
         options={{
           position: fen,

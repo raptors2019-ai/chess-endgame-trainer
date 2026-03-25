@@ -37,14 +37,14 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <nav className="border-b border-border bg-card/60 backdrop-blur-sm sticky top-0 z-50">
-          <div className="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
             <Link href="/" className="flex items-center gap-2.5 group">
               <span className="text-2xl">♔</span>
               <span className="font-heading font-bold text-base tracking-tight text-foreground">
                 Endgame Trainer
               </span>
             </Link>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-wrap justify-end">
               <Link
                 href="/lesson"
                 className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-all"
