@@ -6,7 +6,13 @@ import { Chess, Square } from "chess.js";
 
 interface ChessBoardProps {
   fen: string;
-  onMove?: (from: string, to: string, newFen: string, san: string, uci: string) => void;
+  onMove?: (
+    from: string,
+    to: string,
+    newFen: string,
+    san: string,
+    uci: string
+  ) => void | Promise<void>;
   onGameOver?: (result: "checkmate" | "stalemate" | "draw") => void;
   interactive?: boolean;
   orientation?: "white" | "black";
@@ -20,6 +26,7 @@ export function ChessBoard({
   orientation = "white",
 }: ChessBoardProps) {
   const [selectedSquare, setSelectedSquare] = useState<Square | null>(null);
+  const [isSubmittingMove, setIsSubmittingMove] = useState(false);
 
   const game = useMemo(() => {
     const g = new Chess();
@@ -55,7 +62,7 @@ export function ChessBoard({
 
   const tryMove = useCallback(
     (sourceSquare: string, targetSquare: string) => {
-      if (!interactive) return false;
+      if (!interactive || isSubmittingMove) return false;
 
       try {
         const move = game.move({
@@ -67,7 +74,14 @@ export function ChessBoard({
         if (!move) return false;
 
         const uci = move.from + move.to + (move.promotion || "");
-        onMove?.(move.from, move.to, game.fen(), move.san, uci);
+        setSelectedSquare(null);
+        setIsSubmittingMove(true);
+        Promise.resolve(onMove?.(move.from, move.to, game.fen(), move.san, uci)).catch(
+          (error) => {
+            console.error("Move handling failed:", error);
+            setIsSubmittingMove(false);
+          }
+        );
 
         if (game.isCheckmate()) {
           onGameOver?.("checkmate");
@@ -77,13 +91,12 @@ export function ChessBoard({
           onGameOver?.("draw");
         }
 
-        setSelectedSquare(null);
         return true;
       } catch {
         return false;
       }
     },
-    [game, interactive, onMove, onGameOver]
+    [game, interactive, isSubmittingMove, onMove, onGameOver]
   );
 
   return (
@@ -92,7 +105,7 @@ export function ChessBoard({
         options={{
           position: fen,
           boardOrientation: orientation,
-          allowDragging: interactive,
+          allowDragging: interactive && !isSubmittingMove,
           squareStyles: customSquareStyles,
           darkSquareStyle: { backgroundColor: "#779952" },
           lightSquareStyle: { backgroundColor: "#edeed1" },
@@ -102,7 +115,7 @@ export function ChessBoard({
             return tryMove(sourceSquare, targetSquare);
           },
           onSquareClick: ({ square }) => {
-            if (!interactive) return;
+            if (!interactive || isSubmittingMove) return;
 
             if (selectedSquare) {
               const success = tryMove(selectedSquare, square);

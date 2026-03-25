@@ -15,6 +15,7 @@ export default function LessonPage() {
   const [currentPattern, setCurrentPattern] = useState<EndgamePattern | null>(
     null
   );
+  const [coachSessionKey, setCoachSessionKey] = useState("lesson-empty");
   const coachRef = useRef<CoachPanelHandle>(null);
 
   const handleSelectPattern = useCallback(
@@ -23,12 +24,10 @@ export default function LessonPage() {
       if (!position) return;
 
       setCurrentPattern(pattern);
-      trainer.startPosition(position.fen, pattern.id);
+      trainer.startPosition(position, pattern.id);
+      setCoachSessionKey(`lesson-${pattern.id}-${position.fen}-${Date.now()}`);
 
-      const context = await trainer.getInitialContext(
-        position.fen,
-        position.description
-      );
+      const context = await trainer.getInitialContext(position);
 
       setTimeout(() => {
         coachRef.current?.sendContext(context);
@@ -106,6 +105,7 @@ export default function LessonPage() {
         </div>
 
         <ChessBoard
+          key={trainer.fen}
           fen={trainer.fen}
           onMove={handleMove}
           interactive={!trainer.isGameOver && !trainer.isThinking}
@@ -126,7 +126,8 @@ export default function LessonPage() {
             size="sm"
             onClick={() => {
               setCurrentPattern(null);
-              trainer.startPosition("", "");
+              trainer.clearPosition();
+              setCoachSessionKey("lesson-empty");
             }}
           >
             Change Pattern
@@ -136,7 +137,11 @@ export default function LessonPage() {
 
       {/* Coach Column */}
       <div className="flex-1 min-h-[400px] lg:min-h-0 lg:h-[580px]">
-        <CoachPanel ref={coachRef} systemPrompt={trainer.systemPrompt()} />
+        <CoachPanel
+          key={coachSessionKey}
+          ref={coachRef}
+          systemPrompt={trainer.systemPrompt()}
+        />
       </div>
     </div>
   );

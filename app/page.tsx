@@ -10,8 +10,9 @@ export default function Home() {
           Master the Endgame
         </h1>
         <p className="text-muted-foreground text-base leading-relaxed max-w-md mx-auto">
-          Learn essential checkmate patterns with an AI coach that explains
-          every move in plain English. No engine jargon — just clear concepts.
+          Learn the endgames that actually matter for beginners: basic mates,
+          king-and-pawn technique, and the rook endings you will see again and
+          again. Your coach explains the ideas in plain English.
         </p>
       </div>
 
@@ -22,8 +23,8 @@ export default function Home() {
             <div className="text-3xl mb-3">📖</div>
             <h2 className="font-heading text-lg font-bold mb-1.5">Learn</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Step-by-step lessons on checkmate patterns. Your coach explains
-              the technique as you play each move.
+              Guided lessons that teach the plan, the common mistakes, and what
+              each move is trying to accomplish.
             </p>
           </div>
         </Link>
@@ -33,8 +34,8 @@ export default function Home() {
             <div className="text-3xl mb-3">🧩</div>
             <h2 className="font-heading text-lg font-bold mb-1.5">Practice</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Test your skills with puzzles. Find the winning moves — ask for
-              hints when you get stuck.
+              Solve practical endgame puzzles with progressive hints instead of
+              instant spoilers.
             </p>
           </div>
         </Link>
@@ -51,9 +52,10 @@ export default function Home() {
       <div className="mt-16 flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs text-muted-foreground">
         <span>♜ Rook mates</span>
         <span>♛ Queen mates</span>
-        <span>♝ Bishop pairs</span>
-        <span>♞ Knight + Bishop</span>
-        <span>♟ Pawn endgames</span>
+        <span>♟ Opposition</span>
+        <span>♟ Key squares</span>
+        <span>♜ Lucena</span>
+        <span>♜ Philidor</span>
       </div>
     </div>
   );

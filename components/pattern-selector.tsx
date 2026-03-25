@@ -25,10 +25,16 @@ const difficultyConfig = {
 const patternIcons: Record<string, string> = {
   "kq-vs-k": "♛",
   "kr-vs-k": "♜",
-  "k2r-vs-k": "♜♜",
-  "k2b-vs-k": "♝♝",
-  "kbn-vs-k": "♝♞",
   "kp-vs-k": "♟",
+  "rook-pawn-exceptions": "♟",
+  lucena: "♜",
+  philidor: "♜",
+};
+
+const trackLabels: Record<EndgamePattern["track"], string> = {
+  "basic-mates": "Basic Mates",
+  "pawn-endgames": "Pawn Endgames",
+  "rook-endgames": "Rook Endgames",
 };
 
 export function PatternSelector({ onSelect }: PatternSelectorProps) {
@@ -46,15 +52,20 @@ export function PatternSelector({ onSelect }: PatternSelectorProps) {
               <span className="text-2xl opacity-70 group-hover:opacity-100 transition-opacity">
                 {patternIcons[pattern.id] || "♔"}
               </span>
-              <Badge variant="outline" className={`text-xs ${diff.className}`}>
-                {diff.label}
-              </Badge>
+              <div className="flex gap-2">
+                <Badge variant="outline" className="text-xs">
+                  {trackLabels[pattern.track]}
+                </Badge>
+                <Badge variant="outline" className={`text-xs ${diff.className}`}>
+                  {diff.label}
+                </Badge>
+              </div>
             </div>
             <h3 className="font-heading font-bold text-sm mb-1">
               {pattern.name}
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-              {pattern.description}
+              {pattern.whyItMatters}
             </p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               {pattern.keyConcepts.slice(0, 2).map((concept) => (

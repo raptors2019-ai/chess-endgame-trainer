@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getProgress, Progress, getWeakPatterns } from "@/lib/progress";
 import { getPatternById, PATTERNS } from "@/lib/chess/patterns";
 import {
@@ -14,11 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
 export default function ProgressPage() {
-  const [progress, setProgress] = useState<Progress | null>(null);
-
-  useEffect(() => {
-    setProgress(getProgress());
-  }, []);
+  const [progress] = useState<Progress>(() => getProgress());
 
   if (!progress) return null;
 
